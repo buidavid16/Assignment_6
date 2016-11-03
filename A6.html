@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+
+<!--
+
+ Name:              David Bui
+ Email address:     David_Bui@student.uml.edu
+ Affiliation:       Student at UMass Lowell in course COMP 4610 GUI Programming I
+ Date file created: October 31, 2016
+ Short Description: This is the html file for my Assignment 6. The program here is
+                    supposed to produce a dynamically created multiplication table.
+
+-->
+
+<html>
+  <head>
+    <meta charset=utf-8>
+
+    <title>
+      Assignment 6
+    </title>
+
+    <link href="css/A6_CSS.css" type="text/css" rel="stylesheet">
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+    <script>
+
+        function multiplicationTable() {
+        <!-- Checks to make sure values are actually numbers and not blank statements -->
+        if ((input.rowMins.value == "") || (input.rowMaxs.value == "") ||
+            (input.columnMins.value == "") || (input.columnMaxs.value == "") ||
+            isNaN(input.rowMins.value) || isNaN(input.rowMaxs.value) ||
+            isNaN(input.columnMins.value) || isNaN(input.columnMaxs.value)) {
+
+          alert("Invalid input. Enter values as numbers.");
+
+          return false;
+        }
+
+        <!-- Declaration of minimum and maximum values for rows and columns -->
+        var rowMins = parseInt(input.rowMins.value);
+        var rowMaxs = parseInt(input.rowMaxs.value);
+        var columnMins = parseInt(input.columnMins.value);
+        var columnMaxs = parseInt(input.columnMaxs.value);
+
+        <!-- Checks to make sure minimum values do not exceed maximum values -->
+        if ((rowMins > rowMaxs) || (columnMins > columnMaxs)) {
+          alert("Minimum values cannot be larger than maximum values.");
+
+          return false;
+        }
+
+        <!-- Makes arrays to store multiplying values -->
+        var multipliers = new Array();
+        var multiplicands = new Array();
+
+        <!-- Calculates number of rows and columns to make -->
+        var rowCount = rowMaxs - rowMins;
+        var columnCount = columnMaxs - columnMins;
+
+        for (rowMins; rowMins <= rowMaxs; rowMins++) {
+          multiplicands.push(rowMins);
+        }
+
+        for (columnMins; columnMins <= columnMaxs; columnMins++) {
+          multipliers.push(columnMins);
+        }
+
+        var makeTable = "";
+        makeTable += "<table>";
+        
+        <!-- Algorithm for calculating and outputting values in table -->
+        for (var row = 0; row <= (rowCount + 1); row++) {
+            makeTable += "<tr>";
+
+            for (var column = 0; column <= (columnCount + 1); column++) {
+                if (row == 0 && column == 0) {
+                   makeTable += "<td class='empty'>" + "" + "</td>";
+                } else if (row == 0 && column > 0) {
+                   makeTable += "<td class='firstRow'>" + multipliers[column - 1] + "</td>";
+                } else if (column == 0 && row > 0) {
+                   makeTable += "<td class='firstColumn'>" + multiplicands[row - 1] + "</td>";
+                } else {
+                   makeTable += "<td class='middle'>" + (multipliers[column - 1] * multiplicands[row - 1]) + "</td>";
+                }
+            }
+
+            makeTable += "</tr>";
+        }
+
+        makeTable += "</table>";
+        
+        $('#table').html(makeTable);
+
+               return true;
+    }
+
+    </script>
+  </head>
+
+  <h1>
+    Dynamically Created Multiplication Table
+  </h1>
+
+  <!-- Code for physically displaying input table -->
+  <body>
+    <div id="form">
+      <form id="input" action="javascript:void(0)" method="GET" onsubmit="return multiplicationTable();">
+        Minimum Row Value: <input type="text" id="rowMins" name="rowMins">
+        Maximum Row Value: <input type="text" id="rowMaxs" name="rowMaxs"><br>
+        Minimum Column Value: <input type="text" id="columnMins" name="columnMins">
+        Maximum Column Value: <input type="text" id="columnMaxs" name="columnMaxs"><br>
+        <input type="submit" value="Submit" id="submit">
+      </form>
+    </div>
+    
+    <div id="table"></div>
+  </body>
+
+</html>
